@@ -3,10 +3,6 @@ const bodyParser = require("body-parser");
 const MongoClient = require("mongodb").MongoClient;
 const ObjectId = require("mongodb").ObjectId;
 
-const app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
 const password = "Ef4eQDZgFrr6Huu";
 
 const uri =
@@ -15,6 +11,10 @@ const client = new MongoClient(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
+
+const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html");
@@ -44,7 +44,6 @@ client.connect((err) => {
     app.post("/addProduct", (req, res) => {
         const product = req.body;
         productCollection.insertOne(product).then((result) => {
-            console.log("data added successfully");
             // res.send("success");
             res.redirect("/");
         });
